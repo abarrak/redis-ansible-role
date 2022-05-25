@@ -24,6 +24,7 @@ Usage
 Install the requirements, then include the role in your playbook as follows:
 
 ```yaml
+ansible-galaxy -r requirements.yml
 ```
 
 License

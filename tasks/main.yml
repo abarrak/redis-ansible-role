@@ -1,2 +1,64 @@
 ---
-# tasks file for redis-ansible-role
+- name: Install redis chart
+  hosts: kube_node
+
+  vars:
+  - helm_chart_url: https://charts.bitnami.com/bitnami
+    redis_auth_password: {{ vault_redis_auth_password }}
+    release_namespace: redis
+    release_name: redis
+    
+  roles:
+  - name: Ensure helm
+    role: geerlingguy.helm
+    vars:
+      helm_version: {{ helm_version }}
+      helm_platform: linux
+      helm_arch: amd64
+      helm_repo_path: "https://get.helm.sh"
+      helm_bin_path: /usr/local/bin/helm
+
+  tasks:
+  - name: Ensure helm repo is added
+    kubernetes.core.helm_repository:
+      name: bitnami
+      repo_url: "{{ helm_chart_url }}"
+
+  - name: Ensure updated repo
+    ansible.builtin.shell: helm repo update
+
+  - name: Ensure k8s python installed
+    ansible.builtin.shell: |
+      sudo apt install python3-pip -y
+      pip3 install kubernetes --user
+    
+  - name: Ensure namespace
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: "{{ release_name }}"
+
+  - name: Ensure secret
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          namespace: {{ release_name }}
+          name: redis-auth
+        data:
+          password: {{ redis_auth_password }}
+
+  - name: Ensure Redis
+    kubernetes.core.helm:
+      name: {{ release_name }}
+      chart_ref: bitnami/redis
+      update_repo_cache: true
+      create_namespace: true
+      release_namespace: {{ release_namespace }}
+      chart_version: {{ version }}
+      values: "{{ lookup('template', 'manifests/redis_values.yaml') | from_yaml }}"

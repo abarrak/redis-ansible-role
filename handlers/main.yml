@@ -1,2 +1,5 @@
 ---
 # handlers file for redis-ansible-role
+handlers: 
+- name: Print installation result
+  ansible.builtin.shell:

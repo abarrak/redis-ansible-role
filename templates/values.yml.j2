@@ -1,0 +1,79 @@
+##
+# review all available values in:
+# https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+global:
+  storageClass: ""
+
+# String to fully override common.names.fullname
+fullnameOverride: ""
+
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  tag: "{{ base_version }}"
+  debug: false
+
+# Redis architecture, the allowed values: `standalone`` or `replication`.
+#
+architecture: replication
+
+# Authentication.
+auth:
+  enabled: true
+  existingSecret: redis-auth
+  existingSecretPasswordKey: "password"
+
+sentinel:
+  enabled: true
+  quorum: 2
+  automateClusterRecovery: false
+  downAfterMilliseconds: 60000
+  failoverTimeout: 18000
+  parallelSyncs: 1
+  image:
+    registry: docker.io
+    repository: bitnami/redis-sentinel
+    tag: "{{ sentinel_version }}"
+  persistence:
+    enabled: false
+    existingClaim: ""
+    size: 100Mi
+    accessModes:
+    - ReadWriteOnce
+
+master:
+  persistence:
+    enabled: false
+    existingClaim: ""
+    size: 8Gi
+    accessModes:
+    - ReadWriteOnce
+
+# Replicas configuration parameters, in case `replication` architecture is chosen.
+#
+replica:
+  replicaCount: 2
+  persistence:
+    enabled: false
+    existingClaim: ""
+    size: 8Gi
+    accessModes:
+    - ReadWriteOnce
+
+metrics:
+  # Start a sidecar prometheus exporter to expose Redis.
+  enabled: true
+
+  image:
+    registry: docker.io
+    repository: bitnami/redis-exporter
+    tag: "{{ exporter_version }}"
+
+
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: ""
+    namespace: ""
+    additionalLabels:
+      release: kube-promethus-stack
