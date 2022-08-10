@@ -1,0 +1,39 @@
+---
+- name: Install redis instance
+  hosts: kube_node
+
+  tasks:
+  - name: Ensure helm repo is discarded
+    kubernetes.core.helm_repository:
+      name: bitnami
+      repo_url: "{{ helm_chart_url }}"
+      repo_state: absent
+
+  - name: Ensure python is installed
+    ansible.builtin.package:
+      name:
+        - python3-pip
+        - python-pip
+        - python3
+      state: absent
+      ignore_errors: yes
+
+  - name: Ensure k8s-python package is discarded
+    ansible.builtin.shell: |
+      pip3 uninstall kubernetes --user
+
+  - name: Discard redis
+    kubernetes.core.helm:
+      name: {{ release_name }}
+      chart_ref: bitnami/redis
+      release_state: absent
+      release_namespace: {{ release_namespace }}
+
+  - name: Discard namespace
+    kubernetes.core.k8s:
+      state: absent
+      definition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: "{{ release_name }}"

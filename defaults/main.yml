@@ -1,2 +1,20 @@
 ---
-# defaults file for redis-ansible-role
+# defaults variables for the role
+helm_chart_url: https://charts.bitnami.com/bitnami
+redis_auth_password: {{ vault_redis_auth_password }}
+
+release_namespace: redis
+release_name: redis
+
+helm_version: v3.2.1
+helm_platform: linux
+helm_arch: amd64
+helm_repo_path: https://get.helm.sh
+helm_bin_path: /usr/local/bin/helm
+
+redis_version: '7.0.4'
+chart_version: '17.0.10'
+
+redis_image_version: '7.0.4'
+sentinel_image_version: '7.0.4'
+prometheus_exporter_image_version: '1.43.0'

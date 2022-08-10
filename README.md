@@ -21,11 +21,21 @@ A requirement of `helm` role is specified  as `./requirements.yml`
 Usage
 -----
 
-Install the requirements, then include the role in your playbook as follows:
+1. Install the requirements, then include the role in your playbook as follows:
 
-```yaml
-ansible-galaxy -r requirements.yml
-```
+  ```yaml
+  ansible-galaxy -r requirements.yml
+  ```
+
+2. Specify your preferences, (e.g. redis chart version, helm version, etc.) if needed.
+
+3. Include the role into your playbook, then run it.
+
+  ```yaml
+  - hosts: all
+    roles:
+      - role: redis-ansible
+  ```
 
 License
 -------

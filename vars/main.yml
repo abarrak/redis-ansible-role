@@ -1,7 +1,0 @@
----
-chart_version: '16.5.4'
-redis_version: '6.2.6'
-redis_image_version: 6.2.6-debian-10-r146
-sentinel_image_version: 6.2.6-debian-10-r146
-prometheus_exporter_image_version: 1.36.0-debian-10-r5
-helm_version: v3.2.1

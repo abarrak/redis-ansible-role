@@ -1,5 +1,9 @@
 ---
-# handlers file for redis-ansible-role
-handlers: 
-- name: Print installation result
-  ansible.builtin.shell:
+handlers:
+- name: Check installation
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: {{ release_namespace }}
+    field_selectors:
+      - status.phase=Running
+
