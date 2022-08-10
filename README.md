@@ -6,12 +6,14 @@ A redis ansible role based on [Bitnami's chart](https://github.com/bitnami/chart
 Requirements
 ------------
 
-A one of kubernetes cluster nodes as host target to run against.
+A one of kubernetes cluster nodes as host target to run against, or control node with linked `kubeconfig`.
 
 Role Variables
 --------------
 
-The default varibales are defined in `defaults/main.yml` and `vars/main.yml`, such as chart versions and should be overriden as convenient. All the [chart variables](https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml) can be set there as well.
+The default varibales are defined in `defaults/main.yml`, (e.g. versions) and should be overriden as convenient.
+
+All the [helm chart variables](https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml) can be set there as well.
 
 Dependencies
 ------------
