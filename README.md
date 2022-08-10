@@ -41,9 +41,9 @@ To uninstall, include the relative tasks from role:
 
 ```yaml
 - name: uninstall redis
-    ansible.builtin.include_role:
-      name: redis-ansible-role
-      tasks_from: 'uninstall'
+  ansible.builtin.include_role:
+    name: redis-ansible-role
+    tasks_from: 'uninstall'
 ```
 
 License
