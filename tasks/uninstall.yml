@@ -16,6 +16,7 @@
     chart_ref: bitnami/redis
     release_state: absent
     release_namespace: "{{ release_namespace }}"
+    wait: true
 
 - name: Discard namespace
   kubernetes.core.k8s:
