@@ -1,9 +1,8 @@
 ---
-handlers:
 - name: Check installation
   kubernetes.core.k8s_info:
     kind: Pod
-    namespace: {{ release_namespace }}
+    namespace: "{{ release_namespace }}"
     field_selectors:
       - status.phase=Running
 
