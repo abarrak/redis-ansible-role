@@ -1,28 +1,16 @@
 ---
 - name: Ensure helm repo is discarded
-  tags: ['never', 'uninstall']
   kubernetes.core.helm_repository:
     name: bitnami
     repo_url: "{{ helm_chart_url }}"
     repo_state: absent
 
-- name: Ensure python is installed
-  tags: ['never', 'uninstall']
-  ansible.builtin.package:
-    name:
-      - python3-pip
-      - python-pip
-      - python3
-    state: absent
-  ignore_errors: true
-
 - name: Ensure k8s-python package is discarded
-  tags: ['never', 'uninstall']
   ansible.builtin.shell: |
     pip3 uninstall kubernetes --user
+  ignore_errors: true
 
 - name: Discard redis
-  tags: ['never', 'uninstall']
   kubernetes.core.helm:
     name: "{{ release_name }}"
     chart_ref: bitnami/redis
@@ -30,7 +18,6 @@
     release_namespace: "{{ release_namespace }}"
 
 - name: Discard namespace
-  tags: ['never', 'uninstall']
   kubernetes.core.k8s:
     state: absent
     definition:
