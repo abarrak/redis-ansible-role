@@ -46,6 +46,4 @@ galaxy_info:
     - chart
 
 dependencies:
-  roles:
-  - name: geerlingguy.helm
-    src: geerlingguy.helm
+  - role: geerlingguy.helm
