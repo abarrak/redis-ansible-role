@@ -18,26 +18,22 @@ All the [helm chart variables](https://github.com/bitnami/charts/blob/master/bit
 Dependencies
 ------------
 
-A requirement of `helm` role is specified  as `./requirements.yml`
+A requirement of `helm` role is loaded with the role's Dependencies automatically.
 
 Usage
 -----
 
-1. Install the requirements, then include the role in your playbook as follows:
+Install the requirements, then include the role in your playbook as follows:
 
-  ```yaml
-  ansible-galaxy -r requirements.yml
-  ```
+```yaml
+ansible-galaxy install abarrak.redis_ansible_role
+```
 
-2. Specify your preferences, (e.g. redis chart version, helm version, etc.) if needed.
-
-3. Include the role into your playbook, then run it.
-
-  ```yaml
-  - hosts: all
-    roles:
-      - role: redis-ansible-role
-  ```
+```yaml
+- hosts: all
+  roles:
+    - role: redis-ansible-role
+```
 
 To uninstall, include the relative tasks from role:
 
