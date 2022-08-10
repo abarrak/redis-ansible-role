@@ -34,7 +34,7 @@ Usage
   ```yaml
   - hosts: all
     roles:
-      - role: redis-ansible
+      - role: redis-ansible-role
   ```
 
 License

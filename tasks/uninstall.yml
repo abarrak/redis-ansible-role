@@ -24,10 +24,10 @@
 
   - name: Discard redis
     kubernetes.core.helm:
-      name: {{ release_name }}
+      name: "{{ release_name }}"
       chart_ref: bitnami/redis
       release_state: absent
-      release_namespace: {{ release_namespace }}
+      release_namespace: "{{ release_namespace }}"
 
   - name: Discard namespace
     kubernetes.core.k8s:

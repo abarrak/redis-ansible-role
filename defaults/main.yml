@@ -1,7 +1,7 @@
 ---
 # defaults variables for the role
 helm_chart_url: https://charts.bitnami.com/bitnami
-redis_auth_password: {{ vault_redis_auth_password }}
+redis_auth_password: "{{ vault_redis_auth_password | default('redis') }}"
 
 release_namespace: redis
 release_name: redis

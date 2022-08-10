@@ -45,18 +45,18 @@
         apiVersion: v1
         kind: Secret
         metadata:
-          namespace: {{ release_name }}
+          namespace: "{{ release_name }}"
           name: redis-auth
         data:
-          password: {{ redis_auth_password }}
+          password: "{{ redis_auth_password }}"
 
   - name: Ensure Redis
     kubernetes.core.helm:
-      name: {{ release_name }}
+      name: "{{ release_name }}"
       chart_ref: bitnami/redis
       update_repo_cache: true
-      release_namespace: {{ release_namespace }}
-      chart_version: {{ version }}
+      release_namespace: "{{ release_namespace }}"
+      chart_version: "{{ version }}"
       wait: true
       values: "{{ lookup('template', 'manifests/redis_values.yaml') | from_yaml }}"
     notify:

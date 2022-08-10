@@ -2,7 +2,7 @@ roles:
 - name: geerlingguy.helm
   src: geerlingguy.helm
 
-- name: redis-ansible
+- name: redis-ansible-role
   src: git@github.com:abarrak/redis-ansible-role.git
   scm: git
 
