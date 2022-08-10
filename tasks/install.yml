@@ -1,63 +1,55 @@
 ---
-- name: Install redis instance
-  hosts: kube_node
-  gather_facts: true
+- name: Ensure helm repo is added
+  kubernetes.core.helm_repository:
+    name: bitnami
+    repo_url: "{{ helm_chart_url }}"
 
-  roles:
-  - name: Ensure helm
-    role: geerlingguy.helm
+- name: Ensure updated repo
+  ansible.builtin.shell: helm repo update
 
-  tasks:
-  - name: Ensure helm repo is added
-    kubernetes.core.helm_repository:
-      name: bitnami
-      repo_url: "{{ helm_chart_url }}"
+- name: Ensure python is installed
+  ansible.builtin.package:
+    name:
+      - python3-pip
+      - python-pip
+      - python3
+    state: present
+  ignore_errors: true
 
-  - name: Ensure updated repo
-    ansible.builtin.shell: helm repo update
+- name: Ensure k8s python installed
+  ansible.builtin.shell: |
+    pip3 install kubernetes --user
 
-  - name: Ensure python is installed
-    ansible.builtin.package:
-      name:
-        - python3-pip
-        - python-pip
-        - python3
-      state: present
-      ignore_errors: yes
+- name: Ensure namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ release_name }}"
 
-  - name: Ensure k8s python installed
-    ansible.builtin.shell: |
-      pip3 install kubernetes --user
+- name: Ensure secret
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        namespace: "{{ release_name }}"
+        name: redis-auth
+      data:
+        password: "{{ redis_auth_password }}"
 
-  - name: Ensure namespace
-    kubernetes.core.k8s:
-      state: present
-      definition:
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: "{{ release_name }}"
-
-  - name: Ensure secret
-    kubernetes.core.k8s:
-      state: present
-      definition:
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          namespace: "{{ release_name }}"
-          name: redis-auth
-        data:
-          password: "{{ redis_auth_password }}"
-
-  - name: Ensure Redis
-    kubernetes.core.helm:
-      name: "{{ release_name }}"
-      chart_ref: bitnami/redis
-      update_repo_cache: true
-      release_namespace: "{{ release_namespace }}"
-      chart_version: "{{ version }}"
-      wait: true
-      values: "{{ lookup('template', 'manifests/redis_values.yaml') | from_yaml }}"
-    notify:
-    - Check installation
+- name: Ensure Redis
+  kubernetes.core.helm:
+    name: "{{ release_name }}"
+    chart_ref: bitnami/redis
+    update_repo_cache: true
+    release_namespace: "{{ release_namespace }}"
+    chart_version: "{{ chart_version }}"
+    wait: true
+    values: "{{ lookup('template', 'values.yml.j2') | from_yaml }}"
+  notify:
+  - Check installation
+  - Report status

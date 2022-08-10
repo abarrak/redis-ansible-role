@@ -10,7 +10,7 @@ fullnameOverride: ""
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: "{{ base_version }}"
+  tag: "{{ redis_image_version }}"
   debug: false
 
 # Redis architecture, the allowed values: `standalone`` or `replication`.
@@ -33,7 +33,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: "{{ sentinel_version }}"
+    tag: "{{ sentinel_image_version }}"
   persistence:
     enabled: false
     existingClaim: ""
@@ -67,7 +67,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: "{{ exporter_version }}"
+    tag: "{{ prometheus_exporter_image_version }}"
 
 
   serviceMonitor:

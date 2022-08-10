@@ -5,4 +5,8 @@
     namespace: "{{ release_namespace }}"
     field_selectors:
       - status.phase=Running
+  register: results
 
+- name: Report status
+  debug:
+    msg: "{{ results['msg']['api_found'] }}"
